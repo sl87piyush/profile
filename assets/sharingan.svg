@@ -1,82 +1,169 @@
-<!-- Save as assets/sharingan.svg -->
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="520" height="520">
-
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
   <defs>
-    <radialGradient id="bg" cx="50%" cy="50%" r="70%">
-      <stop offset="0%" stop-color="#0a0a0f"/>
+
+    <!-- ── Glow filters ───────────────────────── -->
+    <filter id="fAura" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="22" result="b"/>
+      <feColorMatrix in="b" type="matrix"
+        values="1 0 0 0 0.55   0 0 0 0 0   0 0 0 0 0   0 0 0 1 0"
+        result="c"/>
+      <feMerge><feMergeNode in="c"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+
+    <filter id="fBlade" x="-25%" y="-25%" width="150%" height="150%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="b"/>
+      <feColorMatrix in="b" type="matrix"
+        values="1.4 0 0 0 0.25   0 0 0 0 0   0 0 0 0 0   0 0 0 1.3 0"
+        result="c"/>
+      <feMerge><feMergeNode in="c"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+
+    <filter id="fPupil" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="b"/>
+      <feColorMatrix in="b" type="matrix"
+        values="1.5 0 0 0 0.4   0 0 0 0 0   0 0 0 0 0   0 0 0 0.9 0"
+        result="c"/>
+      <feMerge><feMergeNode in="c"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+
+    <filter id="fRing" x="-10%" y="-10%" width="120%" height="120%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+
+    <!-- ── Gradients ──────────────────────────── -->
+    <radialGradient id="gAura" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#b30000" stop-opacity="0.7"/>
+      <stop offset="40%"  stop-color="#800000" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+
+    <radialGradient id="gBlade" cx="50%" cy="50%" r="60%">
+      <stop offset="0%"   stop-color="#d40000"/>
+      <stop offset="55%"  stop-color="#b30000"/>
+      <stop offset="100%" stop-color="#6b0000"/>
+    </radialGradient>
+
+    <radialGradient id="gArcBlade" cx="50%" cy="50%" r="60%">
+      <stop offset="0%"   stop-color="#c00000"/>
+      <stop offset="100%" stop-color="#800000"/>
+    </radialGradient>
+
+    <radialGradient id="gRing" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#cc0000"/>
+      <stop offset="60%"  stop-color="#990000"/>
+      <stop offset="100%" stop-color="#550000"/>
+    </radialGradient>
+
+    <radialGradient id="gPupil" cx="38%" cy="33%" r="65%">
+      <stop offset="0%"   stop-color="#200000"/>
       <stop offset="100%" stop-color="#000000"/>
     </radialGradient>
 
-    <radialGradient id="redAura" cx="50%" cy="50%" r="65%">
-      <stop offset="0%" stop-color="#ff1a1a" stop-opacity="0.8"/>
-      <stop offset="60%" stop-color="#ff0000" stop-opacity="0.3"/>
-      <stop offset="100%" stop-color="#ff0000" stop-opacity="0"/>
+    <radialGradient id="gVignette" cx="50%" cy="50%" r="50%">
+      <stop offset="55%" stop-color="#000000" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.7"/>
     </radialGradient>
 
-    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-      <feGaussianBlur stdDeviation="6" result="blur"/>
-      <feMerge>
-        <feMergeNode in="blur"/>
-        <feMergeNode in="SourceGraphic"/>
-      </feMerge>
-    </filter>
+    <!-- ── Clip ───────────────────────────────── -->
+    <clipPath id="cEye">
+      <circle cx="256" cy="256" r="222"/>
+    </clipPath>
 
-    <style>
-      .rotate {
-        transform-origin: 256px 256px;
-        animation: spin 6s linear infinite;
-      }
-
-      .pulse {
-        transform-origin: 256px 256px;
-        animation: pulse 2s ease-in-out infinite;
-      }
-
-      @keyframes spin {
-        from { transform: rotate(0deg); }
-        to { transform: rotate(360deg); }
-      }
-
-      @keyframes pulse {
-        0%,100% { transform: scale(1); opacity: .9; }
-        50% { transform: scale(1.04); opacity: 1; }
-      }
-    </style>
   </defs>
 
-  <!-- Background -->
-  <rect width="512" height="512" fill="url(#bg)"/>
+  <!-- ── Animations ────────────────────────────────────── -->
+  <style>
+    .rot {
+      animation: rot 5.5s linear infinite;
+      transform-origin: 256px 256px;
+    }
+    .pulse {
+      animation: pulse 2.4s ease-in-out infinite;
+      transform-origin: 256px 256px;
+    }
+    .breathe {
+      animation: breathe 2.4s ease-in-out infinite;
+      transform-origin: 256px 256px;
+    }
+    @keyframes rot {
+      from { transform: rotate(0deg);   }
+      to   { transform: rotate(360deg); }
+    }
+    @keyframes pulse {
+      0%,100% { transform: scale(1);    opacity: 1;    }
+      50%      { transform: scale(1.22); opacity: 0.82; }
+    }
+    @keyframes breathe {
+      0%,100% { opacity: 0.65; transform: scale(1);    }
+      50%      { opacity: 1.0;  transform: scale(1.06); }
+    }
+  </style>
 
-  <!-- Red Aura -->
-  <circle cx="256" cy="256" r="210" fill="url(#redAura)" class="pulse"/>
+  <!-- ══ 0. Void ══════════════════════════════════════════ -->
+  <rect width="512" height="512" fill="#050000"/>
 
-  <!-- Outer Ring -->
-  <circle cx="256" cy="256" r="180" fill="#000000" stroke="#b30000" stroke-width="40" filter="url(#glow)"/>
+  <!-- ══ 1. Radial red aura corona ════════════════════════ -->
+  <ellipse class="breathe"
+    cx="256" cy="256" rx="300" ry="300"
+    fill="url(#gAura)" filter="url(#fAura)"/>
 
-  <!-- Mangekyou Shape -->
-  <g class="rotate" fill="#b30000" filter="url(#glow)">
-    
-    <!-- ORIGINAL SVG PATH INSERTED HERE -->
-    <!-- Paste path data from your original SVG below -->
+  <!-- ══ 2. Eye base ══════════════════════════════════════ -->
+  <circle cx="256" cy="256" r="222" fill="#080000"/>
 
-    <path d="M256 120 
-             C210 120 180 160 200 210
-             C220 260 300 260 320 210
-             C340 160 302 120 256 120Z"/>
+  <!-- ══ 3. Outer thick ring ══════════════════════════════ -->
+  <circle cx="256" cy="256" r="222"
+    fill="none" stroke="#5a0000" stroke-width="36" opacity="0.6" filter="url(#fRing)"/>
+  <circle cx="256" cy="256" r="222"
+    fill="none" stroke="url(#gRing)" stroke-width="24" filter="url(#fRing)"/>
+  <circle cx="256" cy="256" r="209"
+    fill="none" stroke="#cc0000" stroke-width="1.5" opacity="0.8"/>
 
-    <path d="M392 256 
-             C392 210 352 180 302 200
-             C252 220 252 300 302 320
-             C352 340 392 302 392 256Z"/>
+  <!-- ══ 4. Rotating Mangekyou blades ══════════════════════ -->
+  <g class="rot" clip-path="url(#cEye)">
+    <g transform="translate(256,256) scale(4.35) translate(-50,-50)">
 
-    <path d="M256 392 
-             C302 392 332 352 312 302
-             C292 252 220 252 200 302
-             C180 352 210 392 256 392Z"/>
+      <!-- Primary 3-petal blade shape -->
+      <path fill="url(#gBlade)" filter="url(#fBlade)"
+        d="M41.096,27.272c-1.23,5-2.32,10.46-3.13,15.79c-5.09,4.078-9.768,8.149-13.686,11.997c-3.865-11.829,1.052-25.105,12.328-31.377c1.978-1.097,4.037-1.917,6.128-2.47C42.171,23.123,41.62,25.156,41.096,27.272z M34.714,68.901c4.941-1.448,10.303-3.248,15.319-5.225c6.09,2.336,11.981,4.446,17.28,5.885c-8.261,9.307-22.204,11.763-33.309,5.195c-2.02-1.198-3.82-2.628-5.394-4.225C30.561,70.057,32.602,69.516,34.714,68.901z M61.806,43.062c-0.97-6.45-2.14-12.54-3.5-17.86c12.17,2.6,21.18,13.52,20.94,26.42c-0.043,2.166-0.35,4.265-0.878,6.272c-1.361-1.408-2.819-2.856-4.371-4.326C70.253,50.033,66.041,46.394,61.806,43.062z"
+      />
 
+      <!-- Arc arm 1: upper-left -->
+      <path fill="url(#gArcBlade)" opacity="0.9" filter="url(#fBlade)"
+        d="M48.342,8.069c-0.517,0.604-1.052,1.438-1.596,2.473c-1.078,2.06-2.188,4.9-3.261,8.239c-3.376,0.875-6.692,2.215-9.856,4.053c-5.854,3.4-10.498,8.087-13.789,13.491c-1.245,1.757-8.905,14.715-7.396,32.383C9.624,63.071,8.027,56.72,8.027,50C8.027,27.412,25.965,8.944,48.342,8.069z"
+      />
+
+      <!-- Arc arm 2: upper-right -->
+      <path fill="url(#gArcBlade)" opacity="0.9" filter="url(#fBlade)"
+        d="M52.432,8.103c16.048,7.569,23.411,20.71,24.305,22.67c3.02,5.56,4.74,11.93,4.74,18.7c0,3.553-0.48,6.994-1.366,10.265c-2.412-2.613-4.382-5.018-5.657-6.993c-0.666-1.037-1.142-1.954-1.405-2.727C71.769,42.985,69.799,40.58,67.387,37.967z"
+      />
+
+      <!-- Arc arm 3: bottom -->
+      <path fill="url(#gArcBlade)" opacity="0.9" filter="url(#fBlade)"
+        d="M50,91.973c-14.963,0-28.113-7.876-35.547-19.694c0.784,0.146,1.781,0.19,2.957,0.14c2.313-0.102,5.325-0.576,8.733-1.319c2.5,2.546,5.371,4.809,8.632,6.657c5.89,3.337,12.28,4.981,18.607,5.094c2.153,0.189,17.303,0.261,31.841-10.067C77.735,84.32,64.748,91.973,50,91.973z"
+      />
+
+    </g>
   </g>
 
-  <!-- Center Dot -->
-  <circle cx="256" cy="256" r="28" fill="#b30000" filter="url(#glow)" class="pulse"/>
+  <!-- ══ 5. Inner iris accent ring (static) ═══════════════ -->
+  <circle cx="256" cy="256" r="72"
+    fill="none" stroke="#7a0000" stroke-width="2.5" opacity="0.5"/>
+
+  <!-- ══ 6. Center pupil — pulsing ════════════════════════ -->
+  <g class="pulse">
+    <circle cx="256" cy="256" r="52"
+      fill="#2a0000" filter="url(#fPupil)"/>
+    <circle cx="256" cy="256" r="46"
+      fill="url(#gPupil)"/>
+    <circle cx="256" cy="256" r="46"
+      fill="none" stroke="#550000" stroke-width="1.5" opacity="0.7"/>
+    <ellipse cx="243" cy="242" rx="9" ry="5.5"
+      fill="#3a0000" opacity="0.55"
+      transform="rotate(-35 243 242)"/>
+  </g>
+
+  <!-- ══ 7. Vignette finisher ══════════════════════════════ -->
+  <circle cx="256" cy="256" r="256" fill="url(#gVignette)"/>
 
 </svg>
