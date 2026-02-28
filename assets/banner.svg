@@ -1,0 +1,500 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 360" width="1200" height="360">
+  <defs>
+
+    <!-- ═══════════════════════════════════════════
+         FILTERS
+    ═══════════════════════════════════════════ -->
+
+    <!-- Grain / noise texture -->
+    <filter id="fGrain" x="0%" y="0%" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="4"
+        stitchTiles="stitch" result="noise"/>
+      <feColorMatrix in="noise" type="saturate" values="0" result="grayNoise"/>
+      <feBlend in="SourceGraphic" in2="grayNoise" mode="overlay" result="blended"/>
+      <feComposite in="blended" in2="SourceGraphic" operator="in"/>
+    </filter>
+
+    <!-- Red aura glow — deep bloom -->
+    <filter id="fRedBloom" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="28" result="b1"/>
+      <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="b2"/>
+      <feColorMatrix in="b1" type="matrix"
+        values="1.2 0 0 0 0.55
+                0   0 0 0 0
+                0   0 0 0 0
+                0   0 0 0.8 0" result="r1"/>
+      <feColorMatrix in="b2" type="matrix"
+        values="1.5 0 0 0 0.3
+                0   0 0 0 0
+                0   0 0 0 0
+                0   0 0 1.2 0" result="r2"/>
+      <feMerge>
+        <feMergeNode in="r1"/>
+        <feMergeNode in="r2"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Red ring soft glow -->
+    <filter id="fRedRing" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="b"/>
+      <feColorMatrix in="b" type="matrix"
+        values="1.3 0 0 0 0.4
+                0   0 0 0 0
+                0   0 0 0 0
+                0   0 0 1 0" result="c"/>
+      <feMerge>
+        <feMergeNode in="c"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Purple shadow glow -->
+    <filter id="fPurpleGlow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="18" result="b"/>
+      <feColorMatrix in="b" type="matrix"
+        values="0.1 0 0 0 0.15
+                0   0 0 0 0
+                0   0 0 0 0.7
+                0   0 0 1 0" result="c"/>
+      <feMerge>
+        <feMergeNode in="c"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Purple wisp tight glow -->
+    <filter id="fWisp" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="7" result="b"/>
+      <feColorMatrix in="b" type="matrix"
+        values="0.2 0 0 0 0.1
+                0   0 0 0 0
+                0   0 0 0 0.8
+                0   0 0 1.4 0" result="c"/>
+      <feMerge>
+        <feMergeNode in="c"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Text main glow -->
+    <filter id="fTextGlow" x="-15%" y="-40%" width="130%" height="180%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="12" result="b1"/>
+      <feGaussianBlur in="SourceGraphic" stdDeviation="4"  result="b2"/>
+      <feColorMatrix in="b1" type="matrix"
+        values="0.9 0 0 0 0.5
+                0   0 0 0 0
+                0   0 0 0.2 0
+                0   0 0 0.9 0" result="c1"/>
+      <feColorMatrix in="b2" type="matrix"
+        values="1 0 0 0 0.7
+                0 0 0 0 0.05
+                0 0 0 0 0
+                0 0 0 1.2 0" result="c2"/>
+      <feMerge>
+        <feMergeNode in="c1"/>
+        <feMergeNode in="c2"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Subtitle glow -->
+    <filter id="fSubGlow" x="-10%" y="-60%" width="120%" height="220%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="b"/>
+      <feColorMatrix in="b" type="matrix"
+        values="0.5 0 0 0 0.2
+                0   0 0 0 0
+                0   0 0 0.8 0
+                0   0 0 0.8 0" result="c"/>
+      <feMerge>
+        <feMergeNode in="c"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Divider line glow -->
+    <filter id="fLine" x="-5%" y="-600%" width="110%" height="1300%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+
+    <!-- ═══════════════════════════════════════════
+         GRADIENTS
+    ═══════════════════════════════════════════ -->
+
+    <!-- Background base -->
+    <linearGradient id="gBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"   stop-color="#08080e"/>
+      <stop offset="50%"  stop-color="#0a0a0f"/>
+      <stop offset="100%" stop-color="#070710"/>
+    </linearGradient>
+
+    <!-- Left red radial -->
+    <radialGradient id="gRedCore" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#ff1a00" stop-opacity="0.9"/>
+      <stop offset="30%"  stop-color="#cc0000" stop-opacity="0.6"/>
+      <stop offset="70%"  stop-color="#7a0000" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Mid blend — merges red and purple -->
+    <linearGradient id="gMidBlend" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%"   stop-color="#200000" stop-opacity="0"/>
+      <stop offset="30%"  stop-color="#1a0010" stop-opacity="0.4"/>
+      <stop offset="60%"  stop-color="#0d0020" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+    </linearGradient>
+
+    <!-- Purple wave gradient -->
+    <linearGradient id="gPurple1" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%"   stop-color="#6b00cc" stop-opacity="0.8"/>
+      <stop offset="60%"  stop-color="#3d0080" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#1a0040" stop-opacity="0"/>
+    </linearGradient>
+
+    <linearGradient id="gPurple2" x1="100%" y1="100%" x2="20%" y2="0%">
+      <stop offset="0%"   stop-color="#9900ff" stop-opacity="0.6"/>
+      <stop offset="50%"  stop-color="#5500aa" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+    </linearGradient>
+
+    <!-- Name text fill — hot white to red -->
+    <linearGradient id="gName" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"   stop-color="#ffffff"/>
+      <stop offset="40%"  stop-color="#ffdddd"/>
+      <stop offset="100%" stop-color="#ff8888"/>
+    </linearGradient>
+
+    <!-- Subtitle fill -->
+    <linearGradient id="gSub" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%"   stop-color="#cc88ff"/>
+      <stop offset="50%"  stop-color="#aa55ee"/>
+      <stop offset="100%" stop-color="#8833cc"/>
+    </linearGradient>
+
+    <!-- Divider gradient -->
+    <linearGradient id="gDivider" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%"   stop-color="#cc0000" stop-opacity="0"/>
+      <stop offset="20%"  stop-color="#cc0000" stop-opacity="0.9"/>
+      <stop offset="60%"  stop-color="#9900ff" stop-opacity="0.7"/>
+      <stop offset="100%" stop-color="#6600cc" stop-opacity="0"/>
+    </linearGradient>
+
+  </defs>
+
+  <!-- ── ANIMATIONS ──────────────────────────────────────────── -->
+  <style>
+    .ring-slow  { animation: ringRot 18s linear infinite; transform-origin: 230px 180px; }
+    .ring-med   { animation: ringRot 11s linear infinite reverse; transform-origin: 230px 180px; }
+    .ring-fast  { animation: ringRot  7s linear infinite; transform-origin: 230px 180px; }
+    .core-pulse { animation: corePulse 2.8s ease-in-out infinite; transform-origin: 230px 180px; }
+    .aura-breathe { animation: auraBreathe 3s ease-in-out infinite; transform-origin: 230px 180px; }
+    .wave1 { animation: waveDrift1 6s ease-in-out infinite; }
+    .wave2 { animation: waveDrift2 8s ease-in-out infinite; }
+    .wave3 { animation: waveDrift3 5s ease-in-out infinite; }
+    .shadow-float { animation: shadowFloat 4s ease-in-out infinite; transform-origin: 900px 180px; }
+    .name-pulse { animation: namePulse 3.5s ease-in-out infinite; }
+    .grain-shift { animation: grainShift 0.15s steps(1) infinite; }
+
+    @keyframes ringRot {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+    @keyframes corePulse {
+      0%,100% { transform: scale(1);    opacity: 1; }
+      50%      { transform: scale(1.15); opacity: 0.8; }
+    }
+    @keyframes auraBreathe {
+      0%,100% { opacity: 0.7; transform: scale(1); }
+      50%      { opacity: 1.0; transform: scale(1.07); }
+    }
+    @keyframes waveDrift1 {
+      0%,100% { transform: translateY(0px) scaleX(1); }
+      50%      { transform: translateY(-12px) scaleX(1.04); }
+    }
+    @keyframes waveDrift2 {
+      0%,100% { transform: translateY(0px); }
+      50%      { transform: translateY(16px); }
+    }
+    @keyframes waveDrift3 {
+      0%,100% { transform: translateY(0px) scaleX(1); }
+      50%      { transform: translateY(-8px) scaleX(0.97); }
+    }
+    @keyframes shadowFloat {
+      0%,100% { opacity: 0.7; transform: scale(1) translateX(0); }
+      50%      { opacity: 1;   transform: scale(1.04) translateX(-8px); }
+    }
+    @keyframes namePulse {
+      0%,100% { opacity: 1; }
+      50%      { opacity: 0.88; }
+    }
+  </style>
+
+  <!-- ══════════════════════════════════════════════════════════
+       LAYER 0 — Background
+  ══════════════════════════════════════════════════════════ -->
+  <rect width="1200" height="360" fill="url(#gBg)"/>
+
+  <!-- ══════════════════════════════════════════════════════════
+       LAYER 1 — Grain texture overlay
+  ══════════════════════════════════════════════════════════ -->
+  <rect width="1200" height="360" fill="#0a0a0f" filter="url(#fGrain)" opacity="0.08"/>
+
+  <!-- Subtle deep scanline feel — horizontal very faint lines -->
+  <rect width="1200" height="1" y="60"  fill="#ffffff" opacity="0.012"/>
+  <rect width="1200" height="1" y="120" fill="#ffffff" opacity="0.012"/>
+  <rect width="1200" height="1" y="180" fill="#ffffff" opacity="0.012"/>
+  <rect width="1200" height="1" y="240" fill="#ffffff" opacity="0.012"/>
+  <rect width="1200" height="1" y="300" fill="#ffffff" opacity="0.012"/>
+
+  <!-- ══════════════════════════════════════════════════════════
+       LAYER 2 — Red aura corona (LEFT)
+       Center: 230, 180
+  ══════════════════════════════════════════════════════════ -->
+
+  <!-- Outermost diffuse bloom -->
+  <ellipse class="aura-breathe"
+    cx="230" cy="180" rx="340" ry="280"
+    fill="url(#gRedCore)" filter="url(#fRedBloom)" opacity="0.45"/>
+
+  <!-- Outer faint ring -->
+  <circle class="ring-slow"
+    cx="230" cy="180" r="230"
+    fill="none" stroke="#7a0000" stroke-width="1" opacity="0.25"
+    filter="url(#fRedRing)"
+    stroke-dasharray="12 22"/>
+
+  <!-- Mid ring - dashed rotating -->
+  <circle class="ring-med"
+    cx="230" cy="180" r="170"
+    fill="none" stroke="#bb0000" stroke-width="1.5" opacity="0.4"
+    filter="url(#fRedRing)"
+    stroke-dasharray="8 14"/>
+
+  <!-- Inner spinning ring -->
+  <circle class="ring-fast"
+    cx="230" cy="180" r="118"
+    fill="none" stroke="#ee0000" stroke-width="2" opacity="0.55"
+    filter="url(#fRedRing)"
+    stroke-dasharray="5 8"/>
+
+  <!-- Abstract radial spokes (3 sets, rotated) -->
+  <g class="ring-slow" opacity="0.3" filter="url(#fRedRing)">
+    <line x1="230" y1="50"  x2="230" y2="130" stroke="#dd2200" stroke-width="1.5"/>
+    <line x1="230" y1="230" x2="230" y2="310" stroke="#dd2200" stroke-width="1.5"/>
+    <line x1="100" y1="180" x2="150" y2="180" stroke="#dd2200" stroke-width="1.5"/>
+    <line x1="310" y1="180" x2="360" y2="180" stroke="#dd2200" stroke-width="1.5"/>
+    <line x1="138" y1="88"  x2="173" y2="123" stroke="#dd2200" stroke-width="1.5"/>
+    <line x1="287" y1="237" x2="322" y2="272" stroke="#dd2200" stroke-width="1.5"/>
+    <line x1="138" y1="272" x2="173" y2="237" stroke="#dd2200" stroke-width="1.5"/>
+    <line x1="287" y1="123" x2="322" y2="88"  stroke="#dd2200" stroke-width="1.5"/>
+  </g>
+
+  <!-- Mid-ring concentric solid -->
+  <circle cx="230" cy="180" r="88"
+    fill="none" stroke="#990000" stroke-width="2.5" opacity="0.6"
+    filter="url(#fRedRing)"/>
+
+  <!-- Close ring -->
+  <circle cx="230" cy="180" r="55"
+    fill="none" stroke="#cc2200" stroke-width="3" opacity="0.75"
+    filter="url(#fRedRing)"/>
+
+  <!-- Thin bright inner ring -->
+  <circle cx="230" cy="180" r="32"
+    fill="none" stroke="#ff3300" stroke-width="2" opacity="0.9"
+    filter="url(#fRedRing)"/>
+
+  <!-- Core glow -->
+  <circle class="core-pulse"
+    cx="230" cy="180" r="18"
+    fill="#ff1100" opacity="0.8"
+    filter="url(#fRedBloom)"/>
+
+  <!-- Hot center -->
+  <circle cx="230" cy="180" r="8"
+    fill="#ffffff" opacity="0.9"
+    filter="url(#fRedRing)"/>
+  <circle cx="230" cy="180" r="4"
+    fill="#ffffff"/>
+
+  <!-- 3 abstract curved arc segments (Sharingan-inspired geometry, abstract) -->
+  <g class="ring-med" filter="url(#fRedRing)" opacity="0.65">
+    <path d="M 200,145 C 185,155 183,172 195,185" fill="none" stroke="#ff2200" stroke-width="3" stroke-linecap="round"/>
+    <path d="M 255,145 C 272,148 283,163 278,182" fill="none" stroke="#ff2200" stroke-width="3" stroke-linecap="round"/>
+    <path d="M 218,210 C 210,225 226,238 244,233" fill="none" stroke="#ff2200" stroke-width="3" stroke-linecap="round"/>
+  </g>
+
+  <!-- ══════════════════════════════════════════════════════════
+       LAYER 3 — Mid blend energy field
+  ══════════════════════════════════════════════════════════ -->
+  <rect width="1200" height="360" fill="url(#gMidBlend)"/>
+
+  <!-- ══════════════════════════════════════════════════════════
+       LAYER 4 — Purple shadow waves (RIGHT)
+  ══════════════════════════════════════════════════════════ -->
+
+  <!-- Deep background shadow bloom -->
+  <ellipse class="shadow-float"
+    cx="980" cy="180" rx="380" ry="260"
+    fill="#4400aa" opacity="0.18" filter="url(#fPurpleGlow)"/>
+
+  <!-- Wave set 1 — large sweeping background curves -->
+  <g class="wave1" filter="url(#fPurpleGlow)">
+    <path d="M 1200,0 C 1050,40 950,120 820,90 C 700,60 660,130 550,110 L 550,0 Z"
+      fill="url(#gPurple1)" opacity="0.22"/>
+    <path d="M 1200,360 C 1100,310 1000,270 880,300 C 760,330 700,270 580,290 L 580,360 Z"
+      fill="url(#gPurple2)" opacity="0.22"/>
+  </g>
+
+  <!-- Wave set 2 — mid flowing tendrils -->
+  <g class="wave2" filter="url(#fWisp)">
+    <path d="M 1200,80 C 1120,100 1040,60 960,90 C 880,120 820,80 740,100 C 680,115 650,145 600,140"
+      fill="none" stroke="#7700cc" stroke-width="2" opacity="0.55" stroke-linecap="round"/>
+    <path d="M 1200,160 C 1110,175 1020,145 930,165 C 850,182 790,155 710,175 C 660,188 630,175 580,172"
+      fill="none" stroke="#9900ee" stroke-width="2.5" opacity="0.6" stroke-linecap="round"/>
+    <path d="M 1200,250 C 1090,235 1000,265 900,248 C 810,232 760,262 670,245 C 625,236 600,248 570,244"
+      fill="none" stroke="#6600bb" stroke-width="2" opacity="0.5" stroke-linecap="round"/>
+    <path d="M 1200,310 C 1130,295 1060,318 980,302 C 900,287 840,308 760,294"
+      fill="none" stroke="#8800dd" stroke-width="1.5" opacity="0.45" stroke-linecap="round"/>
+  </g>
+
+  <!-- Wave set 3 — bright sharp wisps -->
+  <g class="wave3" filter="url(#fWisp)">
+    <path d="M 1200,120 C 1150,108 1090,130 1020,115 C 960,102 910,125 850,112 C 800,101 770,120 720,115"
+      fill="none" stroke="#bb44ff" stroke-width="1.5" opacity="0.7" stroke-linecap="round"/>
+    <path d="M 1200,200 C 1160,195 1100,210 1040,200 C 990,191 950,208 880,198 C 820,189 790,205 740,200 C 700,196 675,205 640,200"
+      fill="none" stroke="#cc66ff" stroke-width="1" opacity="0.6" stroke-linecap="round"/>
+    <path d="M 1190,275 C 1130,265 1070,280 1000,268 C 940,257 890,275 830,262"
+      fill="none" stroke="#aa33ee" stroke-width="1.5" opacity="0.55" stroke-linecap="round"/>
+  </g>
+
+  <!-- Vertical rising shadow pillars (Solo Leveling energy feel) -->
+  <g filter="url(#fPurpleGlow)" opacity="0.3">
+    <rect x="860" y="0"    width="2" height="160" fill="#9900ff"
+      rx="1" opacity="0.6"/>
+    <rect x="940" y="50"   width="1.5" height="200" fill="#7700cc"
+      rx="1" opacity="0.5"/>
+    <rect x="1010" y="0"   width="2" height="140" fill="#bb00ff"
+      rx="1" opacity="0.55"/>
+    <rect x="1090" y="80"  width="1" height="180" fill="#6600aa"
+      rx="1" opacity="0.45"/>
+    <rect x="1150" y="0"   width="2" height="220" fill="#9900dd"
+      rx="1" opacity="0.5"/>
+    <rect x="870"  y="200" width="1.5" height="160" fill="#8800cc"
+      rx="1" opacity="0.4"/>
+    <rect x="960"  y="240" width="2"   height="120" fill="#aa00ee"
+      rx="1" opacity="0.45"/>
+    <rect x="1050" y="190" width="1"   height="170" fill="#7700bb"
+      rx="1" opacity="0.4"/>
+    <rect x="1120" y="220" width="1.5" height="140" fill="#9900ff"
+      rx="1" opacity="0.5"/>
+  </g>
+
+  <!-- Floating particle dots -->
+  <g filter="url(#fWisp)">
+    <circle cx="820" cy="95"  r="2"   fill="#cc55ff" opacity="0.6"/>
+    <circle cx="888" cy="155" r="1.5" fill="#aa33ff" opacity="0.7"/>
+    <circle cx="955" cy="68"  r="1.5" fill="#dd77ff" opacity="0.55"/>
+    <circle cx="1020" cy="215" r="2"  fill="#bb44ff" opacity="0.65"/>
+    <circle cx="1080" cy="132" r="1"  fill="#cc66ff" opacity="0.6"/>
+    <circle cx="1140" cy="270" r="2"  fill="#9922ee" opacity="0.7"/>
+    <circle cx="760"  cy="225" r="1.5" fill="#aa33ff" opacity="0.5"/>
+    <circle cx="830"  cy="300" r="1"  fill="#cc55ff" opacity="0.55"/>
+    <circle cx="900"  cy="265" r="2"  fill="#bb44ff" opacity="0.6"/>
+    <circle cx="975"  cy="295" r="1"  fill="#9933ee" opacity="0.5"/>
+    <circle cx="1050" cy="310" r="1.5" fill="#cc55ff" opacity="0.55"/>
+    <circle cx="1110" cy="55"  r="1"  fill="#dd77ff" opacity="0.5"/>
+    <circle cx="1170" cy="100" r="2"  fill="#aa33ee" opacity="0.6"/>
+  </g>
+
+  <!-- Red particles (left bleeding right slightly) -->
+  <g filter="url(#fRedRing)">
+    <circle cx="370" cy="110" r="1.5" fill="#ff3300" opacity="0.45"/>
+    <circle cx="420" cy="230" r="1"   fill="#dd2200" opacity="0.4"/>
+    <circle cx="480" cy="75"  r="1.5" fill="#ff2200" opacity="0.35"/>
+    <circle cx="510" cy="290" r="1"   fill="#cc1100" opacity="0.4"/>
+  </g>
+
+  <!-- ══════════════════════════════════════════════════════════
+       LAYER 5 — Divider line
+  ══════════════════════════════════════════════════════════ -->
+  <line x1="480" y1="275" x2="1130" y2="275"
+    stroke="url(#gDivider)" stroke-width="1" opacity="0.6" filter="url(#fLine)"/>
+
+  <!-- Thin top accent line -->
+  <line x1="520" y1="78" x2="1150" y2="78"
+    stroke="url(#gDivider)" stroke-width="0.5" opacity="0.3" filter="url(#fLine)"/>
+
+  <!-- ══════════════════════════════════════════════════════════
+       LAYER 6 — TEXT
+  ══════════════════════════════════════════════════════════ -->
+
+  <!-- Name: PIYUSH -->
+  <text class="name-pulse"
+    x="840" y="210"
+    font-family="'Helvetica Neue', 'Arial Black', Helvetica, sans-serif"
+    font-size="118"
+    font-weight="900"
+    letter-spacing="22"
+    text-anchor="middle"
+    fill="url(#gName)"
+    filter="url(#fTextGlow)"
+    opacity="0.96"
+  >PIYUSH</text>
+
+  <!-- Subtitle -->
+  <text
+    x="840" y="252"
+    font-family="'Courier New', 'Lucida Console', monospace"
+    font-size="17"
+    font-weight="400"
+    letter-spacing="6"
+    text-anchor="middle"
+    fill="url(#gSub)"
+    filter="url(#fSubGlow)"
+    opacity="0.88"
+  >SHADOW RANK: S-CLASS DEVELOPER</text>
+
+  <!-- Micro rank badge ornament -->
+  <text
+    x="840" y="302"
+    font-family="'Courier New', monospace"
+    font-size="11"
+    letter-spacing="3"
+    text-anchor="middle"
+    fill="#660099"
+    opacity="0.55"
+  >▲ ─────────────────────────────────────── ▲</text>
+
+  <!-- ══════════════════════════════════════════════════════════
+       LAYER 7 — Final vignette + edge darkening
+  ══════════════════════════════════════════════════════════ -->
+
+  <!-- Top and bottom edge fade to black -->
+  <linearGradient id="gTopFade" x1="0%" y1="0%" x2="0%" y2="100%">
+    <stop offset="0%"  stop-color="#000000" stop-opacity="0.6"/>
+    <stop offset="25%" stop-color="#000000" stop-opacity="0"/>
+  </linearGradient>
+  <linearGradient id="gBotFade" x1="0%" y1="0%" x2="0%" y2="100%">
+    <stop offset="75%" stop-color="#000000" stop-opacity="0"/>
+    <stop offset="100%" stop-color="#000000" stop-opacity="0.6"/>
+  </linearGradient>
+  <rect width="1200" height="360" fill="url(#gTopFade)"/>
+  <rect width="1200" height="360" fill="url(#gBotFade)"/>
+
+  <!-- Left edge fade (so red doesn't bleed out) -->
+  <linearGradient id="gLeftFade" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%"  stop-color="#000000" stop-opacity="0.8"/>
+    <stop offset="10%" stop-color="#000000" stop-opacity="0"/>
+  </linearGradient>
+  <rect width="1200" height="360" fill="url(#gLeftFade)"/>
+
+  <!-- Right edge fade -->
+  <linearGradient id="gRightFade" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="90%"  stop-color="#000000" stop-opacity="0"/>
+    <stop offset="100%" stop-color="#000000" stop-opacity="0.7"/>
+  </linearGradient>
+  <rect width="1200" height="360" fill="url(#gRightFade)"/>
+
+</svg>
