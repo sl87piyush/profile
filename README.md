@@ -31,7 +31,7 @@
   <summary><b>🩸 Open Mangekyō Sharingan</b></summary>
   <br/>
   <div align="center">
-    <img src="assets/sharingan.svg" width="320" />
+   <img src="./assets/sharingan.svg" width="320" />
     <br/><br/>
     <img src="https://img.shields.io/badge/ARISE-Shadow%20Army-7a00ff?style=for-the-badge" />
     <img src="https://img.shields.io/badge/Genjutsu-Activated-ff0033?style=for-the-badge" />
