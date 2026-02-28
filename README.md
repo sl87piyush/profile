@@ -14,7 +14,7 @@
 <br/>
 
 # 🩸 Piyush  
-### 🗡️ Shadow Rank: S-Class Developer  
+### 🗡️ Shadow Rank: E-Class Developer  
 ### 🌑 Uchiha Mode: ON
 
 <img src="https://img.shields.io/badge/Uchiha-Red%20%26%20Black-ff0033?style=for-the-badge" />
@@ -81,7 +81,7 @@
 ```txt
 Name: Piyush
 Class: Developer
-Rank: S-Class (in progress)
+Rank: E-Class (in progress)
 
 Special Abilities:
 - Shadow Summoning (Debugging)
